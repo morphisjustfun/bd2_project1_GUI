@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
 
             auto resultSearch = AvlTree<GameRecord>(nodesFileName).search_by_name(gameTitle);
 
-            if (true)
+            if (resultSearch.gameTitle[0] != '\0')
             {
                 auto record = resultSearch;
                 for (auto column : columns)
@@ -309,10 +309,10 @@ int main(int argc, char *argv[])
                     }
                 }
             }
-            // else
-            // {
-            //     cout << "Registro no se pudo encontrar" << endl;
-            // }
+            else
+            {
+                cout << "Registro no se pudo encontrar" << endl;
+            }
         }
 
         if (datasetFileName == "movies.csv" && dataStructure == "avl_tree")
