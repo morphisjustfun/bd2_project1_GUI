@@ -326,9 +326,8 @@ int main(int argc, char *argv[])
             }
 
             auto record = AvlTree<MovieRecord>(nodesFileName).search_by_name(id);
-            AvlTree<MovieRecord>(nodesFileName).print_preorder();
 
-            if (true)
+            if (record.primaryTitle[0] != '\0')
             {
                 for (auto column : columns)
                 {
@@ -365,10 +364,10 @@ int main(int argc, char *argv[])
                     }
                 }
             }
-            // else
-            // {
-            //     cout << "Registro no se pudo encontrar" << endl;
-            // }
+            else
+            {
+                 cout << "Registro no se pudo encontrar" << endl;
+            }
         }
     }
 

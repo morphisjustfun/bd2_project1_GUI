@@ -17,7 +17,7 @@ struct RecordMovies
 {
     int id;
     char primaryTitle[419];
-    char year[4];
+    char year[5];
     char genres[32];
     bool deleted;
 };
