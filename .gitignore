@@ -47,3 +47,4 @@ io/main
 .fvm/
 src/.vscode/
 src/*.gch
+out/*.out

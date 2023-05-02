@@ -18,35 +18,6 @@
 #include <cstring>
 #include <chrono>
 
-namespace Functions {
-    template <typename Record, typename T>
-    static int compare(T a, T b) {
-        if constexpr (std::is_same<Record, GameRecord>::value) {
-            int i = 0;
-            while (a[i] != '\0' && b[i] != '\0') {
-                if (a[i] < b[i]) {
-                    return 1;
-                } else if (a[i] > b[i]) {
-                    return -1;
-                }
-                i++;
-            }
-            if (a[i] == '\0' && b[i] == '\0') {
-                return 1;
-            } else if (a[i] == '\0') {
-                return 1;
-            } else {
-                return -1;
-            }
-        }
-
-        if constexpr (std::is_same<Record, MovieRecord>::value) {
-            return -1*((a <= b) * -1 + (a > b) * 1);
-        }
-
-    }
-
-};
 
 struct MovieRecord {
     int id;
@@ -79,6 +50,36 @@ struct RecordMetaData {
     long height;
     int deleted;
 };
+
+namespace Functions {
+    template <typename Record, typename T>
+    static int compare(T a, T b) {
+        if constexpr (std::is_same<Record, GameRecord>::value) {
+            int i = 0;
+            while (a[i] != '\0' && b[i] != '\0') {
+                if (a[i] < b[i]) {
+                    return 1;
+                } else if (a[i] > b[i]) {
+                    return -1;
+                }
+                i++;
+            }
+            if (a[i] == '\0' && b[i] == '\0') {
+                return 1;
+            } else if (a[i] == '\0') {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+
+        if constexpr (std::is_same<Record, MovieRecord>::value) {
+            return -1*((a <= b) * -1 + (a > b) * 1);
+        }
+
+    }
+
+}
 
 template<class Record>
 class AvlTree {
@@ -769,17 +770,23 @@ public:
         int cmp2 = 0;
         if constexpr (std::is_same<Record, GameRecord>::value) {
             cmp2 = !strcmp(current.record.gameTitle, gameTitle);
+            if (cmp2) {
+                return current;
+            } else if (comparison <= 0) {
+                return search_by_name(file, current.left, gameTitle);
+            } else {
+                return search_by_name(file, current.right, gameTitle);
+            }
         }
         if constexpr (std::is_same<Record, MovieRecord>::value) {
             cmp2 = gameTitle == current.record.id;
-        }
-
-        if (cmp2) {
-            return current;
-        } else if (comparison > 0) {
-            return search_by_name(file, current.left, gameTitle);
-        } else {
-            return search_by_name(file, current.right, gameTitle);
+            if (cmp2) {
+                return current;
+            } else if (comparison > 0) {
+                return search_by_name(file, current.left, gameTitle);
+            } else {
+                return search_by_name(file, current.right, gameTitle);
+            }
         }
     }
 

@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
             if (datasetFileName == "movies.csv")
             {
                 AvlTree<MovieRecord> avlTree(nodesFileName);
-                
+
                 avlTree.load_from_csv(moviesDatasetFileName, maxValues, '|');
             }
             if (datasetFileName == "games.csv")
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
                 string genres = argv[9];
                 strcpy(record.genres, genres.c_str());
                 AvlTree<MovieRecord> avlTree(nodesFileName);
-                resultAdd =  avlTree.insert(record);
+                resultAdd = avlTree.insert(record);
             }
             if (datasetFileName == "games.csv")
             {
@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
                 float price = stof(argv[8]);
                 record.price = price;
                 AvlTree<GameRecord> avlTree(nodesFileName);
-                resultAdd =  avlTree.insert(record);
+                resultAdd = avlTree.insert(record);
             }
             if (resultAdd)
             {
@@ -212,6 +212,58 @@ int main(int argc, char *argv[])
                 cout << "Registro no se pudo encontrar" << endl;
             }
         }
+
+        if (datasetFileName == "games.csv" && dataStructure == "extendible_hashing")
+        {
+            string gameTitlestr = argv[6];
+            int columnsAmount = stoi(argv[7]);
+            vector<string> columns;
+            for (int i = 0; i < columnsAmount; i++)
+            {
+                columns.push_back(argv[8 + i]);
+            }
+
+            char gameTitle[TITLE_GAME_SIZE];
+            strcpy(gameTitle, gameTitlestr.c_str());
+
+            auto resultSearch = ExtendibleHashingGames(indexFileName, dataFileName).search(gameTitle);
+
+            if (HAS_RECORD_VALUE(resultSearch))
+            {
+                auto record = GET_RECORD_VALUE_GAMES(resultSearch);
+                for (auto column : columns)
+                {
+                    if (column == "publisher")
+                    {
+                        string publisher = string(record.publisher, sizeof(record.publisher));
+                        // delete \0
+                        while (publisher.back() == '\0')
+                        {
+                            publisher.pop_back();
+                        }
+                        cout << "publisher: " << publisher << endl;
+                    }
+                    if (column == "gameTitle")
+                    {
+                        string gameTitle = string(record.gameTitle, sizeof(record.gameTitle));
+                        while (gameTitle.back() == '\0')
+                        {
+                            gameTitle.pop_back();
+                        }
+                        cout << "gameTitle: " << gameTitle << endl;
+                    }
+                    if (column == "price")
+                    {
+                        cout << "price: " << record.price << endl;
+                    }
+                }
+            }
+            else
+            {
+                cout << "Registro no se pudo encontrar" << endl;
+            }
+        }
+
         if (datasetFileName == "games.csv" && dataStructure == "avl_tree")
         {
             string gameTitlestr = argv[6];
@@ -262,7 +314,9 @@ int main(int argc, char *argv[])
             //     cout << "Registro no se pudo encontrar" << endl;
             // }
         }
-        if (datasetFileName == "movies.csv" && dataStructure == "avl_tree") {
+
+        if (datasetFileName == "movies.csv" && dataStructure == "avl_tree")
+        {
             int id = stoi(argv[6]);
             int columnsAmount = stoi(argv[7]);
             vector<string> columns;
@@ -271,7 +325,8 @@ int main(int argc, char *argv[])
                 columns.push_back(argv[8 + i]);
             }
 
-            auto record = ExtendibleHashingMovies(indexFileName, dataFileName).search(id);
+            auto record = AvlTree<MovieRecord>(nodesFileName).search_by_name(id);
+            AvlTree<MovieRecord>(nodesFileName).print_preorder();
 
             if (true)
             {

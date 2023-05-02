@@ -281,6 +281,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             final result = Process.runSync('$compiler', [
                               '${baseFolder}src/extendible_hashing_games.h',
                               '${baseFolder}src/extendible_hashing_movies.h',
+                              '${baseFolder}src/avl_tree.h',
                               '${baseFolder}src/main.cpp',
                               '-o',
                               '${baseFolder}io/main'
@@ -599,7 +600,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       final publisher = valuesList[0][publisherIndex] as String;
       final gameTitle = valuesList[0][gameTitleIndex] as String;
-      final price = valuesList[0][priceIndex] as Double;
+      final price = valuesList[0][priceIndex] as double;
 
       final result = Process.runSync('$baseFolder/io/main', [
         baseFolder,
@@ -704,7 +705,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 content: Column(
               children: const [
                 Text('Errores'),
-                Text('No se pudo insertar el registro'),
+                Text('No se pudo seleccionar el registro'),
               ],
             ));
           },
