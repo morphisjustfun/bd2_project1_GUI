@@ -15,6 +15,8 @@ BD2 Project 1
 - [**Introducción**](#introducción)
   - [**Objetivo**](#objetivo)
   - [**Dominio de Datos**](#dominio-de-datos)
+    - [**Dataset games**](#dataset-games)
+    - [**Dataset movies**](#dataset-games)
 - [**Técnicas Utilizadas**](#técnicas-utilizadas)
   - [**AVL File**](#avl-file)
     - [**Clase AVL**](#clase-avl)
@@ -57,8 +59,26 @@ BD2 Project 1
 El objetivo del presente proyecto es desarrollar un Sistema Gestor de Base de Datos (SGBD) con sus principales funciones para el manejo de datos (insert, search, delete), utilizando técnicas estudiadas en clase y que sean implementadas de tal forma de que el sistema sea eficiente y amigable para el usuario.
 
 ## **Dominio de Datos**
-En cuanto a los datos, se trabaja con los siguientes archivos
+En cuanto a los datos, se trabaja con los siguientes archivos en formato csv delimitados por el caracter '|'
 
+### **Dataset games**
+Presenta los siguientes campos:
+
+| **Campo** | **Tipo** |
+| --- | --- |
+| publisher | `char[]` |
+| game_title | `char[]` |
+| price | `float` |
+
+### **Dataset movies**
+Presenta los siguientes campos:
+
+| **Campo** | **Tipo** |
+| --- | --- |
+| id | `int` |
+| primaryTitle | `char[]` |
+| startYear | `char[]` |
+| genres | `char[]` |
 
 # **Técnicas Utilizadas**
 ## **AVL File**
