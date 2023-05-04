@@ -85,6 +85,17 @@ public:
         }
     }
 
+    vector<RecordMovies> rangeSearch(int idBegin, int idEnd) {
+        vector<RecordMovies> records;
+        for (int i = userIdBegin; i <= userIdEnd; i++) {
+            auto searchRecord = search(i);
+            if (HAS_RECORD_VALUE(searchRecord)) {
+                records.push_back(GET_RECORD_VALUE(searchRecord));
+            }
+        }
+        return records;
+    }
+
     // returns variant<RecordMovies, nullptr_t>
     // if record is found, returns RecordMovies
     // otherwise returns nullptr
