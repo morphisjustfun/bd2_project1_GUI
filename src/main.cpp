@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
             }
             else
             {
-                 cout << "Registro no se pudo encontrar" << endl;
+                cout << "Registro no se pudo encontrar" << endl;
             }
         }
     }
@@ -437,6 +437,175 @@ int main(int argc, char *argv[])
             else
             {
                 cout << "Registro no se pudo eliminar" << endl;
+            }
+        }
+    }
+    if (action == "rangeSelect")
+    {
+        if (datasetFileName == "movies.csv" && dataStructure == "extendible_hashing")
+        {
+            int idBegin = stoi(argv[6]);
+            int idEnd = stoi(argv[7]);
+            int columnsAmount = stoi(argv[8]);
+            vector<string> columns;
+            for (int i = 0; i < columnsAmount; i++)
+            {
+                columns.push_back(argv[9 + i]);
+            }
+
+            auto resultSearch = ExtendibleHashingMovies(indexFileName, dataFileName).rangeSearch(idBegin, idEnd);
+            for (auto const &record : resultSearch)
+            {
+                for (auto column : columns)
+                {
+                    if (column == "id")
+                    {
+                        cout << "id: " << record.id << endl;
+                    }
+                    if (column == "primaryTitle")
+                    {
+                        string primaryTitle = string(record.primaryTitle, sizeof(record.primaryTitle));
+                        while (primaryTitle.back() == '\0')
+                        {
+                            primaryTitle.pop_back();
+                        }
+                        cout << "primaryTitle: " << primaryTitle << endl;
+                    }
+                    if (column == "year")
+                    {
+                        string year = string(record.year, sizeof(record.year));
+                        while (year.back() == '\0')
+                        {
+                            year.pop_back();
+                        }
+                        cout << "year: " << year << endl;
+                    }
+                    if (column == "genres")
+                    {
+                        string genres = string(record.genres, sizeof(record.genres));
+                        while (genres.back() == '\0')
+                        {
+                            genres.pop_back();
+                        }
+                        cout << "genres: " << genres << endl;
+                    }
+                }
+
+                cout << endl
+                     << endl;
+            }
+        }
+
+        if (datasetFileName == "games.csv" && dataStructure == "extendible_hashing")
+        {
+            cout << "rangeSelect no implementado" << endl;
+        }
+
+        if (datasetFileName == "games.csv" && dataStructure == "avl_tree")
+        {
+            string gameTitleBegin = argv[6];
+            string gameTitleEnd = argv[7];
+            int columnsAmount = stoi(argv[8]);
+            vector<string> columns;
+            for (int i = 0; i < columnsAmount; i++)
+            {
+                columns.push_back(argv[9 + i]);
+            }
+
+            char beginChar[TITLE_GAME_SIZE];
+            strcpy(beginChar, gameTitleBegin.c_str());
+
+            char endChar[TITLE_GAME_SIZE];
+            strcpy(endChar, gameTitleEnd.c_str());
+
+            auto resultSearch = AvlTree<GameRecord>(nodesFileName).search_by_name_range(beginChar, endChar);
+
+            for (auto const &record : resultSearch)
+            {
+                for (auto column : columns)
+                {
+                    if (column == "publisher")
+                    {
+                        string publisher = string(record.publisher, sizeof(record.publisher));
+                        // delete \0
+                        while (publisher.back() == '\0')
+                        {
+                            publisher.pop_back();
+                        }
+                        cout << "publisher: " << publisher << endl;
+                    }
+                    if (column == "gameTitle")
+                    {
+                        string gameTitle = string(record.gameTitle, sizeof(record.gameTitle));
+                        while (gameTitle.back() == '\0')
+                        {
+                            gameTitle.pop_back();
+                        }
+                        cout << "gameTitle: " << gameTitle << endl;
+                    }
+                    if (column == "price")
+                    {
+                        cout << "price: " << record.price << endl;
+                    }
+                }
+
+                cout << endl
+                     << endl;
+            }
+        }
+
+        if (datasetFileName == "movies.csv" && dataStructure == "avl_tree")
+        {
+            int idBegin = stoi(argv[6]);
+            int idEnd = stoi(argv[7]);
+            int columnsAmount = stoi(argv[8]);
+            vector<string> columns;
+            for (int i = 0; i < columnsAmount; i++)
+            {
+                columns.push_back(argv[9 + i]);
+            }
+
+            auto resultSearch = AvlTree<MovieRecord>(nodesFileName).search_by_name_range(idBegin, idEnd);
+
+            for (auto const &record : resultSearch)
+            {
+                for (auto column : columns)
+                {
+                    if (column == "id")
+                    {
+                        cout << "id: " << record.id << endl;
+                    }
+                    if (column == "primaryTitle")
+                    {
+                        string primaryTitle = string(record.primaryTitle, sizeof(record.primaryTitle));
+                        while (primaryTitle.back() == '\0')
+                        {
+                            primaryTitle.pop_back();
+                        }
+                        cout << "primaryTitle: " << primaryTitle << endl;
+                    }
+                    if (column == "year")
+                    {
+                        string year = string(record.year, sizeof(record.year));
+                        while (year.back() == '\0')
+                        {
+                            year.pop_back();
+                        }
+                        cout << "year: " << year << endl;
+                    }
+                    if (column == "genres")
+                    {
+                        string genres = string(record.genres, sizeof(record.genres));
+                        while (genres.back() == '\0')
+                        {
+                            genres.pop_back();
+                        }
+                        cout << "genres: " << genres << endl;
+                    }
+                }
+
+                cout << endl
+                     << endl;
             }
         }
     }

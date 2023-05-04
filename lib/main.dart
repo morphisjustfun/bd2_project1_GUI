@@ -1,11 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart' hide Table;
 import 'dart:io';
 import 'package:sqlparser/sqlparser.dart'
     show
         AnalysisContext,
         BasicType,
+        BetweenExpression,
         BinaryExpression,
         DeleteStatement,
         ExpressionResultColumn,
@@ -22,7 +21,6 @@ import 'package:sqlparser/sqlparser.dart'
         TableReference,
         ValuesSource;
 import 'package:tuple/tuple.dart';
-
 
 void showSuccessDialog(BuildContext context) {
   showDialog(
@@ -157,7 +155,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Base de Datos II - Proyecto 1 - Rios Gamboa, Berrospi Rodriguez y Angello Zuloaga',
+      title:
+          'Base de Datos II - Proyecto 1 - Rios Gamboa, Berrospi Rodriguez y Angello Zuloaga',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -648,8 +647,168 @@ class _MyHomePageState extends State<MyHomePage> {
     final table = (select.from as TableReference).tableName;
     final dataset = tablesCreatedWithDataStructure[table]!.item3;
     final dataStructure = tablesCreatedWithDataStructure[table]!.item2;
+    if (select.where is! BinaryExpression) {
+      // it means a between
+      final between = select.where as BetweenExpression;
+      final check = between.check as Reference;
+      if (dataset == MoviesStruct().dataset) {
+        if (check.columnName != MoviesStruct().id.name) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                  content: Column(
+                children: const [
+                  Text('Errores'),
+                  Text('Campo que no sea id no es valido'),
+                ],
+              ));
+            },
+          );
+          return;
+        }
+        final lower = between.lower as NumericLiteral;
+        final upper = between.upper as NumericLiteral;
+        final List<String> columnNames = [];
+        if (select.columns[0] is StarResultColumn) {
+          columnNames.addAll([
+            MoviesStruct().id.name,
+            MoviesStruct().year.name,
+            MoviesStruct().genres.name,
+            MoviesStruct().primaryTitle.name,
+          ]);
+        } else {
+          columnNames.addAll(select.columns
+              .map((e) =>
+                  ((e as ExpressionResultColumn).expression as Reference)
+                      .columnName)
+              .toList());
+        }
+
+        final result = Process.runSync('$baseFolder/io/main', [
+          baseFolder,
+          dataStructure,
+          'rangeSelect',
+          table,
+          dataset,
+          lower.value.toString(),
+          upper.value.toString(),
+          columnNames.length.toString(),
+          ...columnNames,
+        ]);
+
+        if (result.exitCode != 0) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                  content: Column(
+                children: const [
+                  Text('Errores'),
+                  Text('No se pudo realizar la consulta'),
+                ],
+              ));
+            },
+          );
+          return;
+        }
+
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                content: Column(
+              children: [
+                const Text('Exit'),
+                Text(result.stdout as String),
+              ],
+            ));
+          },
+        );
+        return;
+
+      }
+      if (dataset == GamesStruct().dataset) {
+        if (check.columnName != GamesStruct().gameTitle.name) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                  content: Column(
+                children: const [
+                  Text('Errores'),
+                  Text('Campo que no sea gameTitle no es valido'),
+                ],
+              ));
+            },
+          );
+          return;
+        }
+
+        final lower = between.lower as StringLiteral;
+        final upper = between.upper as StringLiteral;
+        final List<String> columnNames = [];
+        if (select.columns[0] is StarResultColumn) {
+          columnNames.addAll([
+            GamesStruct().publisher.name,
+            GamesStruct().price.name,
+            GamesStruct().gameTitle.name,
+          ]);
+        } else {
+          columnNames.addAll(select.columns
+              .map((e) =>
+                  ((e as ExpressionResultColumn).expression as Reference)
+                      .columnName)
+              .toList());
+        }
+
+        final result = Process.runSync('$baseFolder/io/main', [
+          baseFolder,
+          dataStructure,
+          'rangeSelect',
+          table,
+          dataset,
+          lower.value,
+          upper.value,
+          columnNames.length.toString(),
+          ...columnNames,
+        ]);
+
+        if (result.exitCode != 0) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                  content: Column(
+                children: const [
+                  Text('Errores'),
+                  Text('No se pudo realizar la consulta'),
+                ],
+              ));
+            },
+          );
+          return;
+        }
+
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+                content: Column(
+              children: [
+                const Text('Exit'),
+                Text(result.stdout as String),
+              ],
+            ));
+          },
+        );
+        return;
+      }
+      return;
+    }
     final where = select.where as BinaryExpression;
     final left = where.left as Reference;
+
     if (dataset == MoviesStruct().dataset) {
       if (left.columnName != MoviesStruct().id.name) {
         showDialog(
