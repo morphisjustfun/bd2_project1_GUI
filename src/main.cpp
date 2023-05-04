@@ -406,6 +406,39 @@ int main(int argc, char *argv[])
                 cout << "Registro no se pudo eliminar" << endl;
             }
         }
+        if (datasetFileName == "movies.csv" && dataStructure == "avl_tree")
+        {
+            int id = stoi(argv[6]);
+
+            bool resultDelete = AvlTree<MovieRecord>(nodesFileName).delete_item(id);
+
+            if (resultDelete)
+            {
+                cout << "Registro se eliminó correctamente" << endl;
+            }
+            else
+            {
+                cout << "Registro no se pudo eliminar" << endl;
+            }
+        }
+        if (datasetFileName == "games.csv" && dataStructure == "avl_tree")
+        {
+            string gameTitlestr = argv[6];
+
+            char gameTitle[TITLE_GAME_SIZE];
+            strcpy(gameTitle, gameTitlestr.c_str());
+
+            bool resultDelete = AvlTree<GameRecord>(nodesFileName).delete_item(gameTitle);
+
+            if (resultDelete)
+            {
+                cout << "Registro se eliminó correctamente" << endl;
+            }
+            else
+            {
+                cout << "Registro no se pudo eliminar" << endl;
+            }
+        }
     }
     return 0;
 }

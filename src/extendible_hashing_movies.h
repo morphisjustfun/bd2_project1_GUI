@@ -87,10 +87,10 @@ public:
 
     vector<RecordMovies> rangeSearch(int idBegin, int idEnd) {
         vector<RecordMovies> records;
-        for (int i = userIdBegin; i <= userIdEnd; i++) {
+        for (int i = idBegin; i <= idEnd; i++) {
             auto searchRecord = search(i);
             if (HAS_RECORD_VALUE(searchRecord)) {
-                records.push_back(GET_RECORD_VALUE(searchRecord));
+                records.push_back(GET_RECORD_VALUE_MOVIES(searchRecord));
             }
         }
         return records;

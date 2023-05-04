@@ -157,13 +157,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Base de Datos II - Proyecto 1 - Rios Gamboa y Berrospi Rodriguez',
+      title: 'Base de Datos II - Proyecto 1 - Rios Gamboa, Berrospi Rodriguez y Angello Zuloaga',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(
           title:
-              'Base de Datos II - Proyecto 1 - Rios Gamboa y Berrospi Rodriguez'),
+              'Base de Datos II - Proyecto 1 - Rios Gamboa, Berrospi Rodriguez y Angello Zuloaga'),
     );
   }
 }
